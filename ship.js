@@ -1,155 +1,152 @@
 import Canvas from "./canvas";
 
-const states = {
-  FLYING: "FLYING",
-  TAKINGOFF: "TAKINGOFF",
-  CRASHED: "CRASHED",
-  ORBIT: "ORBIT",
-  LANDED: "LANDED",
-  LANDEDTOOFAST: "LANDEDTOOFAST",
-};
-
 export default class Ship extends Canvas {
-  x = 0;
-  y = 0;
-  vx = 0;
-  vy = 0;
-  tx = 0.02;
-  ty = 0.04;
-  blasters = {};
+	x = 0;
+	y = 0;
+	vx = 0;
+	vy = 0;
+	tx = 0.02;
+	ty = 0.04;
+	blasters = {};
 
-  state = "FLYING";
+	FLYING = "FLYING";
+	TAKINGOFF = "TAKINGOFF";
+	CRASHED = "CRASHED";
+	ORBIT = "ORBIT";
+	LANDED = "LANDED";
+	LANDEDTOOFAST = "LANDEDTOOFAST";
 
-  constructor(options) {
-    super(options);
-    this.shipWidth = options.w;
-  }
+	state = this.FLYING;
 
-  loaded(img) {
-    // @context.fillStyle = "red"
-    // @context.fillRect(0,0,@w,@h)
-    this.context.scale(0.5, 0.5);
-    return this.context.drawImage(img, 0, 0);
-  }
+	constructor(options) {
+		super(options);
+		this.shipWidth = options.w;
+	}
 
-  createShip(level) {
-    this.level = level;
-    this.vx = 0;
-    this.vy = 0;
-    this.fuel = this.level.fuel;
-    this.carrying = null;
-    return (this.state = states.FLYING);
-  }
+	loaded(img) {
+		this.context.scale(0.5, 0.5);
+		this.context.drawImage(img, 0, 0);
+	}
 
-  resetBlasters() {
-    return (this.blasters = {
-      up: false,
-      down: false,
-      left: false,
-      right: false,
-    });
-  }
+	createShip(level) {
+		this.level = level;
+		this.vx = 0;
+		this.vy = 0;
+		this.fuel = this.level.fuel;
+		this.carrying = null;
+		this.state = this.FLYING;
+	}
 
-  update(world, left, right, up, down) {
-    this.world = world;
-    this.resetBlasters();
+	resetBlasters() {
+		this.blasters = {
+			up: false,
+			down: false,
+			left: false,
+			right: false,
+		};
+	}
 
-    if (this.fuel > 0) {
-      if (left) {
-        this.blasters.left = true;
-        this.fuel--;
-        this.vx -= this.tx;
-      }
-      if (right) {
-        this.blasters.right = true;
-        this.fuel--;
-        this.vx += this.tx;
-      }
-      if (up) {
-        if (this.state === states.TAKINGOFF) {
-          this.state = states.FLYING;
-        }
+	update(world, left, right, up, down) {
+		this.world = world;
+		this.resetBlasters();
 
-        this.blasters.up = true;
-        this.fuel -= 2;
-        this.vy -= this.ty;
-      }
-      if (down) {
-        this.blasters.down = true;
-        this.fuel -= 2;
-        this.vy += this.ty;
-      }
-    }
+		if (this.fuel > 0) {
+			if (left) {
+				this.blasters.left = true;
+				this.fuel--;
+				this.vx -= this.tx;
+			}
+			if (right) {
+				this.blasters.right = true;
+				this.fuel--;
+				this.vx += this.tx;
+			}
+			if (up) {
+				if (this.state === this.TAKINGOFF) {
+					this.state = this.FLYING;
+				}
 
-    if (this.fuel < 0) {
-      this.fuel = 0;
-    }
+				this.blasters.up = true;
+				this.fuel -= 2;
+				this.vy -= this.ty;
+			}
+			if (down) {
+				this.blasters.down = true;
+				this.fuel -= 2;
+				this.vy += this.ty;
+			}
+		}
 
-    this.vx += this.world.wind;
-    this.vy += this.world.gravity;
+		if (this.fuel < 0) {
+			this.fuel = 0;
+		}
 
-    this.x += this.vx;
-    this.y += this.vy;
+		this.vx += this.world.wind;
+		this.vy += this.world.gravity;
 
-    // if @x < 0
-    //   @vx = -@vx
-    //   @x = -@x
-    // else if @x > @world.w
-    //   @vx = -@vx
-    //   @x = @world.w - (@x - @world.w)
+		this.x += this.vx;
+		this.y += this.vy;
 
-    if (this.x < 0) {
-      this.x += this.world.w;
-    } else if (this.x > this.world.w) {
-      this.x -= this.world.w;
-    }
+		// if @x < 0
+		//   @vx = -@vx
+		//   @x = -@x
+		// else if @x > @world.w
+		//   @vx = -@vx
+		//   @x = @world.w - (@x - @world.w)
 
-    const spot = this.world.profile[~~this.x];
+		if (this.x < 0) {
+			this.x += this.world.w;
+		} else if (this.x > this.world.w) {
+			this.x -= this.world.w;
+		}
 
-    const floor = this.world.h - spot.y;
+		const spot = this.world.profile[~~this.x];
 
-    this.heightAboveFloor = floor - this.y;
+		const floor = this.world.h - spot.y;
 
-    if (this.y < -150) {
-      this.vx = 0;
-      this.vy = 0;
-      this.state = states.ORBIT;
-      return this.resetBlasters();
-    } else if (this.y >= floor) {
-      this.y = floor;
+		this.heightAboveFloor = floor - this.y;
 
-      if (this.state === states.TAKINGOFF) {
-        if (this.vy > 0) {
-          this.vy = 0;
-        } // trying to fly through the floor!
-        return;
-      }
+		if (this.y < -150) {
+			this.vx = 0;
+			this.vy = 0;
+			this.state = this.ORBIT;
+			this.resetBlasters();
+		} else if (this.y >= floor) {
+			this.y = floor;
 
-      if (spot.safe) {
-        if (this.vy < 0.5) {
-          this.vx = 0;
-          this.vy = 0;
-          this.platform = spot.platform;
-          this.state = states.LANDED;
-          return this.resetBlasters();
+			if (this.state === this.TAKINGOFF) {
+				if (this.vy > 0) {
+					this.vy = 0;
+				} // trying to fly through the floor!
+				return;
+			}
 
-          // con.log(@platform)
-        }
+			if (spot.safe) {
+				if (this.vy < 0.5) {
+					this.vx = 0;
+					this.vy = 0;
+					this.platform = spot.platform;
+					this.state = this.LANDED;
+					this.resetBlasters();
+					return;
+				}
 
-        if (spot.platform.bouncy != null) {
-          // coz we bounce around here bro.
-          this.vy = -this.vy;
-          return (this.y = floor - (this.y - floor));
-        }
-        this.vx = 0;
-        this.vy = 0;
-        this.state = states.LANDEDTOOFAST;
-        return this.resetBlasters();
-      }
-      this.vx = 0;
-      this.vy = 0;
-      this.state = states.CRASHED;
-      return this.resetBlasters();
-    }
-  }
+				if (spot.platform.bouncy != null) {
+					// coz we bounce around here bro.
+					this.vy = -this.vy;
+					this.y = floor - (this.y - floor);
+					return;
+				}
+				this.vx = 0;
+				this.vy = 0;
+				this.state = this.LANDEDTOOFAST;
+				this.resetBlasters();
+				return;
+			}
+			this.vx = 0;
+			this.vy = 0;
+			this.state = this.CRASHED;
+			this.resetBlasters();
+		}
+	}
 }
