@@ -1,9 +1,3 @@
-const utils = {
-	isTouchDevice() {
-		return "ontouchstart" in document.documentElement;
-	},
-};
-
 import Levels from "./levels";
 import Canvas from "./canvas";
 import World from "./world";
@@ -16,6 +10,10 @@ const CRASHED = "CRASHED";
 const LANDED = "LANDED";
 const ENDLEVEL = "ENDLEVEL";
 const GAMEOVER = "GAMEOVER";
+
+const isTouchDevice = () => {
+	return true; // "ontouchstart" in document.documentElement;
+};
 
 export default class Lunar {
 	// don't confuse state with ship.state
@@ -38,8 +36,7 @@ export default class Lunar {
 
 	constructor() {
 		this.el = document.createElement("div");
-
-		// $(@el).css("opacity", 0.15)
+		this.el.id = "game";
 
 		const scale = 1; // scale is not implemented!
 
@@ -56,29 +53,31 @@ export default class Lunar {
 		this.el.appendChild(this.stage.canvas);
 		this.stage.canvas.style.border = "5px solid rgba(0,0,0,0)";
 
-		if (utils.isTouchDevice()) {
-			const createArrow = (dir, code) => {
-				const div = document.createElement("div");
-				this.el.appendChild(div);
-				div.className = `game-${dir}-arrow at-icon-chevron-${dir}`;
-				div.innerText = code;
-				return div;
-			};
-			const left = createArrow("left", 37);
-			const right = createArrow("right", 39);
-			const up = createArrow("up", 38);
-			const down = createArrow("down", 40);
+		const focuses = [this.stage.canvas];
+		if (isTouchDevice()) {
+			focuses.push(
+				...["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].map((code) => {
+					const btn = document.createElement("button");
+					this.el.appendChild(btn);
+					btn.className = `game-arrow game-${code.replace("Arrow", "").toLowerCase()}-arrow`;
+					btn.innerText = code;
+					btn.code = code;
+					return btn;
+				})
+			);
 		}
 
 		const interactionListener = (e) => {
 			if (this.state === GAMEOVER) {
 				return;
 			}
-			this.hasFocus = e.target === this.stage.canvas;
+			console.log(focuses);
+			this.hasFocus = focuses.includes(e.target);
 			if (this.hasFocus) {
-				return this.addListeners();
+				this.addListeners();
+				return;
 			}
-			return this.removeListeners();
+			this.removeListeners();
 		};
 
 		document.addEventListener("touchstart", interactionListener);
@@ -90,7 +89,7 @@ export default class Lunar {
 		const img = new Image();
 		img.onload = () => {
 			this.ship.loaded(img);
-			return this.restartLevel();
+			this.restartLevel();
 		};
 		// @loop()
 		img.src = "/images/lunar-shoe.png";
@@ -101,18 +100,17 @@ export default class Lunar {
 			return;
 		}
 		this.stage.canvas.style.border = "5px solid rgba(10,140,255,0.5)";
-		if (utils.isTouchDevice()) {
+		if (isTouchDevice()) {
 			this.game = document.getElementById("game");
 
-			this.onTouchStart = (ev) => {
-				const e = ev.originalEvent;
+			this.onTouchStart = (e) => {
+				console.log("ee...", e.target.code);
 				e.preventDefault();
-				this.interactStart(String(e.target.code));
+				this.interactStart(e.target.code);
 			};
-			this.onTouchEnd = (ev) => {
-				const e = ev.originalEvent;
+			this.onTouchEnd = (e) => {
 				e.preventDefault();
-				this.interactEnd(String(e.target.code));
+				this.interactEnd(e.target.code);
 			};
 
 			this.game.addEventListener("touchstart", this.onTouchStart);
@@ -134,7 +132,7 @@ export default class Lunar {
 			return;
 		}
 		this.stage.canvas.style.border = "5px solid rgba(0,0,0,0)";
-		if (utils.isTouchDevice()) {
+		if (isTouchDevice()) {
 			this.game.removeEventListener("touchstart", this.onTouchStart);
 			this.game.removeEventListener("touchend", this.onTouchEnd);
 		} else {

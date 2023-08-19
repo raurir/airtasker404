@@ -1,0 +1,66 @@
+:root {
+	--size: 80px;
+}
+
+body {
+	margin: 0;
+}
+
+#game {
+	position: relative;
+	margin: 0 auto;
+	border: 1px solid red;
+	display: flex;
+	justify-content: center;
+}
+
+#game canvas {
+	width: 100%;
+}
+
+.game-arrow {
+	position: absolute;
+	width: var(--size);
+	height: var(--size);
+	line-height: var(--size);
+	font-size: 20px;
+	border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.8);
+	color: blue;
+	background-color: red;
+}
+
+.game-left-arrow {
+	right: calc(10px + 10px + var(--size));
+	bottom: 10px;
+}
+.game-right-arrow {
+	right: 10px;
+	bottom: 10px;
+}
+.game-up-arrow {
+	left: 10px;
+	bottom: calc(10px + 10px + var(--size));
+}
+.game-down-arrow {
+	left: 10px;
+	bottom: 10px;
+}
+
+/*
+  .share-game-button
+    textBold()
+    position absolute
+    bottom 100px
+    width 160px
+    height 25px
+    line-height 25px
+    background rgba(255,255,255,0.7)
+    cursor pointer
+    &:hover
+      background rgba(255,255,255,1)
+    &.facebook
+      left 220px
+    &.twitter
+      right 220px
+ */
