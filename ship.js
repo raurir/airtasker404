@@ -87,13 +87,6 @@ export default class Ship extends Canvas {
 		this.x += this.vx;
 		this.y += this.vy;
 
-		// if @x < 0
-		//   @vx = -@vx
-		//   @x = -@x
-		// else if @x > @world.w
-		//   @vx = -@vx
-		//   @x = @world.w - (@x - @world.w)
-
 		if (this.x < 0) {
 			this.x += this.world.w;
 		} else if (this.x > this.world.w) {
@@ -135,7 +128,6 @@ export default class Ship extends Canvas {
 					// coz we bounce around here bro.
 					this.vy = -this.vy;
 					this.y = floor - (this.y - floor);
-					return;
 				}
 				this.vx = 0;
 				this.vy = 0;

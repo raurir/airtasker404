@@ -17,10 +17,10 @@ export default class World extends Canvas {
 		const s1 = Math.random() * 0.01;
 		const s2 = Math.random() * 0.01;
 
-		const s3 = 2 * ~~(Math.random() * 3);
-		const s4 = 2 * ~~(Math.random() * 3);
-		const s5 = 2 * ~~(Math.random() * 3);
-		const s6 = 2 * ~~(Math.random() * 3);
+		// const s3 = 2 * ~~(Math.random() * 3);
+		// const s4 = 2 * ~~(Math.random() * 3);
+		// const s5 = 2 * ~~(Math.random() * 3);
+		// const s6 = 2 * ~~(Math.random() * 3);
 
 		let h = this.num(this.h * 0.2, this.h * 0.4);
 
@@ -121,11 +121,9 @@ export default class World extends Canvas {
 		this.land.context.globalCompositeOperation = "source-over";
 
 		for (const p of Array.from(this.level.platforms)) {
-			// console.log(p)
-
 			x = p.x * this.w;
 			y = this.h - p.y;
-			({ w } = p);
+			const { w } = p;
 			h = 80;
 			// grd = @context.createLinearGradient(x,y,x,y + h)
 			// grd.addColorStop(0, p.colour)
@@ -160,10 +158,6 @@ export default class World extends Canvas {
 			}
 		}
 
-		// @drawBlock(@land.context,x,y,w,h, grd)
-
-		// @context.drawImage(@land.canvas, 0, 0)
-
 		this.sun = new Canvas({ w: this.w, h: this.h });
 		grd = this.context.createRadialGradient(100, 100, 80, 100, 100, 100);
 		grd.addColorStop(0, "#fff");
@@ -171,7 +165,7 @@ export default class World extends Canvas {
 		this.sun.context.fillStyle = grd;
 		this.sun.context.fillRect(0, 0, this.w, this.h);
 
-		return (this.sun.day = 0);
+		this.sun.day = 0;
 	}
 
 	render() {
@@ -186,7 +180,7 @@ export default class World extends Canvas {
 		this.context.drawImage(this.land.canvas, 0, 0);
 
 		if (this.package != null) {
-			return this.context.drawImage(this.package.canvas, this.package.x, this.package.y);
+			this.context.drawImage(this.package.canvas, this.package.x, this.package.y);
 		}
 	}
 
@@ -197,7 +191,7 @@ export default class World extends Canvas {
 		this.render();
 
 		if (this.package.pixels.length > 0) {
-			return setTimeout(() => this.removePackage(), 1000 / 60);
+			setTimeout(() => this.removePackage(), 1000 / 60);
 		}
 	}
 
@@ -212,7 +206,7 @@ export default class World extends Canvas {
 		const pixelY = Math.floor(pixel / 20);
 
 		this.package.context.fillStyle = "rgba(0,0,0,1)";
-		return this.package.context.fillRect(pixelX, pixelY, 1, 1);
+		this.package.context.fillRect(pixelX, pixelY, 1, 1);
 	}
 	resetRain() {
 		const grey = 1; // ~~(Math.random() * 100) + 100
@@ -231,7 +225,7 @@ export default class World extends Canvas {
 		rain.x = -200 + Math.random() * (this.w + 200);
 		rain.y = -200 + Math.random() * (this.h + 200);
 		console.log("spawnRain!!!");
-		return this.rainDrops.push(rain);
+		this.rainDrops.push(rain);
 	}
 
 	renderRain() {

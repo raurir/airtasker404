@@ -104,24 +104,29 @@ export default class Lunar {
 		if (utils.isTouchDevice()) {
 			this.game = document.getElementById("game");
 
-			this.game.addEventListener("touchstart", (ev) => {
+			this.onTouchStart = (ev) => {
 				const e = ev.originalEvent;
 				e.preventDefault();
 				this.interactStart(String(e.target.code));
-			});
-			this.game.addEventListener("touchend", (ev) => {
+			};
+			this.onTouchEnd = (ev) => {
 				const e = ev.originalEvent;
 				e.preventDefault();
 				this.interactEnd(String(e.target.code));
-			});
+			};
+
+			this.game.addEventListener("touchstart", this.onTouchStart);
+			this.game.addEventListener("touchend", this.onTouchEnd);
 		} else {
-			document.body.addEventListener("keydown", (event) => {
+			this.onKeyDown = (event) => {
 				event.preventDefault();
 				this.interactStart(event.code);
-			});
-			document.body.addEventListener("keyup", (event) => this.interactEnd(event.code));
+			};
+			this.onKeyUp = (event) => this.interactEnd(event.code);
+			document.body.addEventListener("keydown", this.onKeyDown);
+			document.body.addEventListener("keyup", this.onKeyUp);
 		}
-		return (this.hasListeners = true);
+		this.hasListeners = true;
 	}
 
 	removeListeners() {
@@ -129,14 +134,14 @@ export default class Lunar {
 			return;
 		}
 		this.stage.canvas.style.border = "5px solid rgba(0,0,0,0)";
-		console.log("removeListeners");
 		if (utils.isTouchDevice()) {
-			// TODO:
-			// $("#game").unbind("touchstart").unbind("touchend");
+			this.game.removeEventListener("touchstart", this.onTouchStart);
+			this.game.removeEventListener("touchend", this.onTouchEnd);
 		} else {
-			// $(document).unbind("keydown").unbind("keyup");
+			document.body.removeEventListener("keydown", this.onKeyDown);
+			document.body.removeEventListener("keyup", this.onKeyUp);
 		}
-		return (this.hasListeners = false);
+		this.hasListeners = false;
 	}
 
 	interactStart(code) {
@@ -344,8 +349,6 @@ export default class Lunar {
 			this.isKeyDown("KeyS") || this.isKeyDown("ArrowDown")
 		);
 
-		console.log("HERE", this.ship.state, this.ship.FLYING);
-
 		switch (this.ship.state) {
 			case this.ship.FLYING:
 				return (this.msg = null);
@@ -424,8 +427,6 @@ export default class Lunar {
 	}
 
 	render(msg) {
-		// $('p').text( @state )
-
 		if (msg != null) {
 			this.msg = msg;
 		}
