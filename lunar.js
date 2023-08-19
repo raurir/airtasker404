@@ -12,7 +12,7 @@ const ENDLEVEL = "ENDLEVEL";
 const GAMEOVER = "GAMEOVER";
 
 const isTouchDevice = () => {
-	return true; // "ontouchstart" in document.documentElement;
+	return "ontouchstart" in document.documentElement;
 };
 
 export default class Lunar {
@@ -58,10 +58,10 @@ export default class Lunar {
 			focuses.push(
 				...["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].map((code) => {
 					const btn = document.createElement("button");
-					this.el.appendChild(btn);
 					btn.className = `game-arrow game-${code.replace("Arrow", "").toLowerCase()}-arrow`;
-					btn.innerText = code;
+					btn.innerHTML = `<svg viewBox="0 0 32 32"><line x1="8" y1="8" x2="28" y2="8"/><line x1="8" y1="8" x2="8" y2="28"/></svg>`;
 					btn.code = code;
+					this.el.appendChild(btn);
 					return btn;
 				})
 			);
@@ -104,12 +104,13 @@ export default class Lunar {
 			this.game = document.getElementById("game");
 
 			this.onTouchStart = (e) => {
-				console.log("ee...", e.target.code);
+				e.target.classList.add("touched");
 				e.preventDefault();
 				this.interactStart(e.target.code);
 			};
 			this.onTouchEnd = (e) => {
 				e.preventDefault();
+				e.target.classList.remove("touched");
 				this.interactEnd(e.target.code);
 			};
 

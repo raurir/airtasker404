@@ -19,15 +19,28 @@ body {
 }
 
 .game-arrow {
+	border: 2px solid #034eb4;
+	background-color: #eee8;
+	border-radius: 50%;
+	height: var(--size);
+	padding: 0;
 	position: absolute;
 	width: var(--size);
-	height: var(--size);
-	line-height: var(--size);
-	font-size: 20px;
-	border-radius: 50%;
-	background-color: rgba(255, 255, 255, 0.8);
-	color: blue;
-	background-color: red;
+}
+
+.game-arrow.touched {
+	background-color: #ffff;
+}
+.game-arrow.touched svg {
+	stroke: #034eb4;
+}
+
+.game-arrow svg {
+	stroke-linecap: round;
+	stroke-width: 6px;
+	stroke: #4791d9;
+	pointer-events: none;
+	width: calc(0.4 * var(--size));
 }
 
 .game-left-arrow {
@@ -40,11 +53,24 @@ body {
 }
 .game-up-arrow {
 	left: 10px;
-	bottom: calc(10px + 10px + var(--size));
+	top: calc(50% - var(--size) - 5px);
 }
 .game-down-arrow {
 	left: 10px;
-	bottom: 10px;
+	top: calc(50% + 5px);
+}
+
+.game-left-arrow svg {
+	transform: rotate(-45deg);
+}
+.game-right-arrow svg {
+	transform: rotate(135deg);
+}
+.game-up-arrow svg {
+	transform: rotate(45deg);
+}
+.game-down-arrow svg {
+	transform: rotate(-135deg);
 }
 
 /*
