@@ -4,6 +4,8 @@ import World from "./world";
 import HUD from "./hud";
 import Ship from "./ship";
 
+import { num } from "./number";
+
 const STARTLEVEL = "STARTLEVEL";
 const PLAYING = "PLAYING";
 const CRASHED = "CRASHED";
@@ -38,17 +40,15 @@ export default class Lunar {
 		this.el = document.createElement("div");
 		this.el.id = "game";
 
-		const scale = 1; // scale is not implemented!
-
 		const baseWidth = 1600;
 		const baseHeight = 800;
 
 		this.levels = Levels;
-		this.world = new World({ w: baseWidth, h: baseHeight, scale });
-		this.stage = new Canvas({ w: baseWidth / 2, h: baseHeight / 2, scale });
-		this.offscreen = new Canvas({ w: baseWidth, h: baseHeight, scale });
-		this.hud = new HUD({ w: this.stage.w, h: this.stage.h, scale });
-		this.ship = new Ship({ w: 100, h: 50, scale });
+		this.world = new World({ w: baseWidth, h: baseHeight });
+		this.stage = new Canvas({ w: baseWidth / 2, h: baseHeight / 2 });
+		this.offscreen = new Canvas({ w: baseWidth, h: baseHeight });
+		this.hud = new HUD({ w: this.stage.w, h: this.stage.h });
+		this.ship = new Ship({ w: 100, h: 50 });
 
 		this.el.appendChild(this.stage.canvas);
 		this.stage.canvas.style.border = "5px solid rgba(0,0,0,0)";
@@ -71,7 +71,6 @@ export default class Lunar {
 			if (this.state === GAMEOVER) {
 				return;
 			}
-			console.log(focuses);
 			this.hasFocus = focuses.includes(e.target);
 			if (this.hasFocus) {
 				this.addListeners();
@@ -91,7 +90,6 @@ export default class Lunar {
 			this.ship.loaded(img);
 			this.restartLevel();
 		};
-		// @loop()
 		img.src = "/images/lunar-shoe.png";
 	}
 
@@ -166,19 +164,19 @@ export default class Lunar {
 	}
 
 	startPlaying() {
-		console.log("startPlaying");
+		// console.log("startPlaying");
 		this.state = PLAYING;
 	}
 
 	crashed() {
 		this.state = CRASHED;
 		this.attempts++;
-		console.log("crashed attempts", this.attempts);
-		return setTimeout(() => this.restartLevel(), 1000);
+		// console.log("crashed attempts", this.attempts);
+		setTimeout(() => this.restartLevel(), 1000);
 	}
 
 	restartLevel() {
-		console.log("restartLevel");
+		// console.log("restartLevel");
 
 		this.state = STARTLEVEL;
 
@@ -189,7 +187,7 @@ export default class Lunar {
 		this.ship.x = this.world.w * 0.5;
 		this.ship.y = 100;
 
-		return this.render({
+		this.render({
 			title: `Level ${this.levelIndex + 1}`,
 			summary: this.level.title.concat("", "Touch/Press keys to start..."),
 		});
@@ -201,11 +199,11 @@ export default class Lunar {
 		this.pointsHeader = `Level ${this.levelIndex + 1} Complete`;
 		this.pointsSummary = [];
 		this.pointsLevel = 0;
-		return setTimeout(() => this.showPoints(0), 1500);
+		setTimeout(() => this.showPoints(0), 1500);
 	}
 
 	showPoints(pointsIndex) {
-		console.log("showPoints", pointsIndex);
+		// console.log("showPoints", pointsIndex);
 		switch (pointsIndex) {
 			case 0:
 				var pointsStat = Math.round(20000 / this.attempts);
@@ -247,9 +245,10 @@ export default class Lunar {
 
 		pointsIndex++;
 		if (pointsIndex < 4) {
-			return setTimeout(() => this.showPoints(pointsIndex), 700);
+			setTimeout(() => this.showPoints(pointsIndex), 700);
+			return;
 		}
-		return this.nextLevel();
+		this.nextLevel();
 	}
 
 	nextLevel() {
@@ -257,14 +256,15 @@ export default class Lunar {
 		this.attempts = 1;
 		this.level.time = { start: new Date().getTime() };
 
-		console.log("nextLevel", this.levelIndex);
+		// console.log("nextLevel", this.levelIndex);
 
 		this.saveScore();
 
 		if (this.levelIndex === this.levels.length) {
-			return setTimeout(() => this.gameOver(), 2000);
+			setTimeout(() => this.gameOver(), 2000);
+			return;
 		}
-		return setTimeout(() => this.restartLevel(), 2000);
+		setTimeout(() => this.restartLevel(), 2000);
 	}
 
 	gameOver() {
@@ -289,6 +289,7 @@ export default class Lunar {
 		// return makeShare("twitter", "Tweet your score");
 	}
 
+	/*
 	share(network) {
 		const msg = `I just got ${this.highScore} on the Airtasker 404 Game!`;
 		const link = (() => {
@@ -301,23 +302,23 @@ export default class Lunar {
 		})();
 		return window.open(link);
 	}
-	// alert(msg)
+	*/
 
 	saveScore() {
-		if ((typeof Airtasker !== "undefined" && Airtasker !== null ? Airtasker.currentUser : undefined) != null) {
+		/*
+		if (Airtasker?.currentUser) {
 			const currentHighScore = Airtasker.currentUser.get("web_display_options").lunar_highscore;
 			if (currentHighScore != null && currentHighScore > this.highScore) {
-				// shucks...
-				return console.log("no high score this time!!!", currentHighScore, this.highScore);
+				// shucks... no high score this time!!!
 			}
-			console.log("Actually saving high score!");
-			// return service.setDisplayOptions(
-			//   { lunar_highscore: this.highScore },
-			//   (response) => console.log("score saved", response),
-			//   (response) => console.log("couldn't save score")
-			// );
+			return service.setDisplayOptions(
+			  { lunar_highscore: this.highScore },
+			  (response) => console.log("score saved", response),
+			  (response) => console.log("couldn't save score")
+			);
 		}
-		return console.log("no onelogged in");
+		// no onelogged in
+		*/
 	}
 
 	loop() {
@@ -328,11 +329,11 @@ export default class Lunar {
 			}
 			this.render();
 			if (this.state === GAMEOVER) {
-				return this.explodeShoes();
+				this.explodeShoes();
 			}
 		} else {
 			this.stage.context.clearRect(0, 0, this.stage.w, this.stage.h);
-			return this.renderHUD(false, {
+			this.renderHUD(false, {
 				title: "Game Paused ...ish",
 				summary: ["Press to start"],
 			});
@@ -429,12 +430,8 @@ export default class Lunar {
 		if (msg != null) {
 			this.msg = msg;
 		}
-		// console.log(msg);
-
-		// console.log(msg);
 
 		// draw to buffer
-
 		this.world.render();
 
 		// draw land
@@ -453,15 +450,15 @@ export default class Lunar {
 		this.offscreen.context.fillStyle = "rgba(5,50,80,0.7)";
 		// draw blasters
 		if (this.ship.blasters.up) {
-			this.offscreen.context.fillRect(this.ship.x - 10 - 2, this.ship.y + 1, 4, this.num(1, 10)); // left bottom blaster
-			this.offscreen.context.fillRect(this.ship.x + 0 - 2, this.ship.y + 1, 4, this.num(1, 10)); // right bottom blaster
-			this.offscreen.context.fillRect(this.ship.x + 10 - 2, this.ship.y + 1, 4, this.num(1, 10)); // right bottom blaster
+			this.offscreen.context.fillRect(this.ship.x - 10 - 2, this.ship.y + 1, 4, num(1, 10)); // left bottom blaster
+			this.offscreen.context.fillRect(this.ship.x + 0 - 2, this.ship.y + 1, 4, num(1, 10)); // right bottom blaster
+			this.offscreen.context.fillRect(this.ship.x + 10 - 2, this.ship.y + 1, 4, num(1, 10)); // right bottom blaster
 		}
 		if (this.ship.blasters.right) {
-			this.offscreen.context.fillRect(this.ship.x - this.ship.w / 2 + 15, this.ship.y - 10, -this.num(1, 10), 3); // left blaster ... moving right
+			this.offscreen.context.fillRect(this.ship.x - this.ship.w / 2 + 15, this.ship.y - 10, -num(1, 10), 3); // left blaster ... moving right
 		}
 		if (this.ship.blasters.left) {
-			this.offscreen.context.fillRect(this.ship.x + this.ship.w / 2 - 15, this.ship.y - 10, this.num(1, 10), 3); // right blaster ... moving left
+			this.offscreen.context.fillRect(this.ship.x + this.ship.w / 2 - 15, this.ship.y - 10, num(1, 10), 3); // right blaster ... moving left
 		}
 
 		// draw mini
@@ -560,45 +557,34 @@ export default class Lunar {
 	spawnShoe() {
 		const shoe = this.resetShoe();
 		// console.log(shoe)
-		return this.shoes.push(shoe);
+		this.shoes.push(shoe);
 	}
 
 	explodeShoes() {
-		// console.log("explodeShoes!")
-
 		if (this.shoes.length < 20 && Math.random() > 0.4) {
 			this.spawnShoe();
 		}
 
-		return (() => {
-			const result = [];
-			for (let i = 0; i < this.shoes.length; i++) {
-				const s = this.shoes[i];
-				s.vy += 0.2; // gravity
-				s.x += s.vx;
-				s.y += s.vy;
-				s.r += s.vr;
+		for (let i = 0; i < this.shoes.length; i++) {
+			const s = this.shoes[i];
+			s.vy += 0.2; // gravity
+			s.x += s.vx;
+			s.y += s.vy;
+			s.r += s.vr;
 
-				if (s.x < -100 || s.x > this.stage.w + 100 || s.y < -100 || s.y > this.stage.h + 100) {
-					this.shoes[i] = this.resetShoe();
-				}
-
-				this.stage.context.save();
-				this.stage.context.translate(s.x, s.y);
-				this.stage.context.rotate(s.r);
-				this.stage.context.translate(-50, -25);
-				this.stage.context.drawImage(this.ship.canvas, 0, 0);
-				// @stage.context.fillStyle = "rgba(100,0,0,0.5)"
-				// @stage.context.fillRect(0,0,100,50)
-				result.push(this.stage.context.restore());
+			if (s.x < -100 || s.x > this.stage.w + 100 || s.y < -100 || s.y > this.stage.h + 100) {
+				this.shoes[i] = this.resetShoe();
 			}
-			return result;
-		})();
+
+			this.stage.context.save();
+			this.stage.context.translate(s.x, s.y);
+			this.stage.context.rotate(s.r);
+			this.stage.context.translate(-50, -25);
+			this.stage.context.drawImage(this.ship.canvas, 0, 0);
+			this.stage.context.restore();
+		}
 	}
 
-	num(min, max) {
-		return Math.random() * (max - min) + min;
-	}
 	isKeyDown(code) {
 		return this.pressedKeys[code] || false;
 	}

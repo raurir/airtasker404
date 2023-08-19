@@ -1,5 +1,7 @@
 import Canvas from "./canvas";
 
+import { num } from "./number";
+
 export default class World extends Canvas {
 	constructor(options) {
 		super(options);
@@ -10,7 +12,7 @@ export default class World extends Canvas {
 	}
 
 	createLand(level) {
-		let w, x, y;
+		let x, y;
 		let asc, end;
 		let asc1, end1;
 		this.level = level;
@@ -22,7 +24,7 @@ export default class World extends Canvas {
 		// const s5 = 2 * ~~(Math.random() * 3);
 		// const s6 = 2 * ~~(Math.random() * 3);
 
-		let h = this.num(this.h * 0.2, this.h * 0.4);
+		let h = num(this.h * 0.2, this.h * 0.4);
 
 		this.gravity = this.level.gravity;
 		this.wind = this.level.wind;
@@ -64,7 +66,7 @@ export default class World extends Canvas {
 
 				safe = false;
 				// colour = @rgba()
-				h += this.num(-3, 3);
+				h += num(-3, 3);
 				y = (Math.sin(c * s1) + Math.sin(c * s2)) * 100 + 100 + h;
 				// y = (
 				//   Math.sin(c / @w * Math.PI * s3) +
@@ -104,7 +106,6 @@ export default class World extends Canvas {
 		for (x = 0, end1 = this.w, asc1 = end1 >= 0; asc1 ? x < end1 : x > end1; asc1 ? x++ : x--) {
 			const block = this.profile[x];
 			h = block.y;
-			const g = this.int(100, 120);
 			this.drawBlock(mask.context, x, this.h - h, 1, h, "#0f0");
 		}
 
@@ -224,7 +225,7 @@ export default class World extends Canvas {
 		const rain = this.resetRain();
 		rain.x = -200 + Math.random() * (this.w + 200);
 		rain.y = -200 + Math.random() * (this.h + 200);
-		console.log("spawnRain!!!");
+		// console.log("spawnRain!!!");
 		this.rainDrops.push(rain);
 	}
 

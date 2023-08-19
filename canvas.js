@@ -1,20 +1,7 @@
 export default class Canvas {
-	num(min, max) {
-		return Math.random() * (max - min) + min;
-	}
-	int(min, max) {
-		return parseInt(this.num(min, max));
-	}
-
 	constructor(options) {
-		if (options.scale == null) {
-			options.scale = 1;
-		}
-
-		this.scale = options.scale;
-		this.w = options.w * this.scale;
-		this.h = options.h * this.scale;
-
+		this.w = options.w;
+		this.h = options.h;
 		this.canvas = document.createElement("canvas");
 		this.canvas.width = this.w;
 		this.canvas.height = this.h;
@@ -22,12 +9,12 @@ export default class Canvas {
 	}
 
 	clear() {
-		this.canvas.width = this.canvas.width;
+		this.canvas.width = this.w;
 	}
 
 	drawBlock(where, x, y, w, h, colour) {
 		where.fillStyle = colour;
-		where.fillRect(x * this.scale, y * this.scale, w * this.scale, h * this.scale);
+		where.fillRect(x, y, w, h);
 	}
 
 	drawText(where, x, y, msg) {
@@ -35,13 +22,12 @@ export default class Canvas {
 	}
 
 	drawCircle(where, x, y, r, fillStyle, lineWidth, strokeStyle) {
-		// console.log("drawCircle",  fillStyle, lineWidth, strokeStyle)
 		where.beginPath();
-		where.arc(x * this.scale, y * this.scale, r * this.scale, 2 * Math.PI, false);
+		where.arc(x, y, r, 2 * Math.PI, false);
 		where.closePath();
 		where.fillStyle = fillStyle;
 		where.fill();
-		where.lineWidth = lineWidth * this.scale;
+		where.lineWidth = lineWidth;
 		where.strokeStyle = strokeStyle;
 		where.stroke();
 	}

@@ -16,7 +16,7 @@ export default [
 			},
 		],
 	},
-
+	/*
 	{
 		difficulty: 2,
 		title: ["This time you have to deliver a package.", "Pick it up first!"],
@@ -113,4 +113,5 @@ export default [
 			},
 		],
 	},
+*/
 ];

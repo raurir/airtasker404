@@ -1,16 +1,11 @@
 import Canvas from "./canvas";
 
-export default class HUD extends Canvas {
-	constructor(options) {
-		super(options);
-		this.alert = 0;
-		this.x = 150 * this.scale;
-		this.y = 330 * this.scale;
-	}
+import { round } from "./number";
 
-	round(num) {
-		return Math.round(num * 10) / 10;
-	}
+export default class HUD extends Canvas {
+	alert = 0;
+	x = 150;
+	y = 330;
 
 	stat(index, txt, num) {
 		this.context.font = "normal 8px sans-serif";
@@ -23,9 +18,7 @@ export default class HUD extends Canvas {
 	}
 
 	render(doRender, ship, level, msg) {
-		this.canvas.width = this.canvas.width; // clear HUD
-
-		// @context.scale(@scale,@scale)
+		this.clear();
 
 		const black = "rgba(0,0,0,1)";
 		const whiteMid = "rgba(255,255,255,0.5)";
@@ -48,20 +41,20 @@ export default class HUD extends Canvas {
 			const barWidth = 40;
 			const barX = this.x + 60;
 
-			this.stat(0, "Gravity:", this.round(level.gravity * 100));
+			this.stat(0, "Gravity:", round(level.gravity * 100));
 			let barY = this.y;
 			this.drawBlock(this.context, barX, barY, barWidth, 10, whiteMid);
 			this.drawBlock(this.context, barX + 1, barY + 1, barWidth - 2, 8, black);
-			this.drawBlock(this.context, barX + 2, barY + 2, this.round(level.gravity * 600), 6, whiteBright);
+			this.drawBlock(this.context, barX + 2, barY + 2, round(level.gravity * 600), 6, whiteBright);
 
-			this.stat(1, "Wind:", this.round(level.wind * 100));
+			this.stat(1, "Wind:", round(level.wind * 100));
 			barY = this.y + 15;
 			this.drawBlock(this.context, barX, barY, barWidth, 10, whiteMid);
 			this.drawBlock(this.context, barX + 1, barY + 1, barWidth - 2, 8, black);
 			this.drawBlock(this.context, barX + barWidth / 2 - 1, barY + 1, 2, 8, whiteMid);
-			this.drawBlock(this.context, barX + barWidth / 2, barY + 2, this.round(level.wind * 1000), 6, whiteBright);
+			this.drawBlock(this.context, barX + barWidth / 2, barY + 2, round(level.wind * 1000), 6, whiteBright);
 
-			this.stat(2, "Fuel:", this.round(ship.fuel));
+			this.stat(2, "Fuel:", round(ship.fuel));
 			barY = this.y + 30;
 			this.drawBlock(this.context, barX, barY, barWidth, 10, colourFuel);
 			this.drawBlock(this.context, barX + 1, barY + 1, barWidth - 2, 8, black);
