@@ -8,7 +8,7 @@ body {
 
 #game {
 	position: relative;
-	border: 1px solid red;
+	/* border: 1px solid red; */
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -75,21 +75,3 @@ body {
 .game-down-arrow svg {
 	transform: rotate(-135deg);
 }
-
-/*
-  .share-game-button
-    textBold()
-    position absolute
-    bottom 100px
-    width 160px
-    height 25px
-    line-height 25px
-    background rgba(255,255,255,0.7)
-    cursor pointer
-    &:hover
-      background rgba(255,255,255,1)
-    &.facebook
-      left 220px
-    &.twitter
-      right 220px
- */

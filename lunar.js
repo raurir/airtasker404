@@ -14,7 +14,7 @@ const ENDLEVEL = "ENDLEVEL";
 const GAMEOVER = "GAMEOVER";
 
 const isTouchDevice = () => {
-	return "ontouchstart" in document.documentElement;
+	return true; // "ontouchstart" in document.documentElement;
 };
 
 export default class Lunar {
@@ -90,7 +90,7 @@ export default class Lunar {
 			this.ship.loaded(img);
 			this.restartLevel();
 		};
-		img.src = "/images/lunar-shoe.png";
+		img.src = `${import.meta.env.BASE_URL}/images/lunar-shoe.png`;
 	}
 
 	addListeners() {
@@ -556,7 +556,6 @@ export default class Lunar {
 
 	spawnShoe() {
 		const shoe = this.resetShoe();
-		// console.log(shoe)
 		this.shoes.push(shoe);
 	}
 
