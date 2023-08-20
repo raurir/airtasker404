@@ -1,14 +1,17 @@
 {
-  "name": "vite-project",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "vite": "^4.4.5"
-  }
+	"author": "raurir <raurir@gmail.com> (https://www.esquemedia.com/)",
+	"name": "airtasker-404-game",
+	"description": "404 game found on airtasker.com 2014-2022",
+	"homepage": "https://www.esquemedia.com/airtasker-404",
+	"private": false,
+	"version": "30.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"vite": "^4.4.5"
+	}
 }

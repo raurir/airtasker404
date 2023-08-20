@@ -48,11 +48,11 @@ body {
 
 .game-left-arrow {
 	right: calc(10px + 10px + var(--size));
-	bottom: 10px;
+	top: calc(50% - var(--size) / 2);
 }
 .game-right-arrow {
 	right: 10px;
-	bottom: 10px;
+	top: calc(50% - var(--size) / 2);
 }
 .game-up-arrow {
 	left: 10px;

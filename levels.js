@@ -9,14 +9,9 @@ export default [
 		gravity: 0.002,
 		fuel: 1500,
 		wind: 0,
-		platforms: [
-			{
-				w: 150,
-				x: 0.7,
-			},
-		],
+		platforms: [{ w: 150, x: 0.7 }],
 	},
-	/*
+
 	{
 		difficulty: 2,
 		title: ["This time you have to deliver a package.", "Pick it up first!"],
@@ -24,16 +19,8 @@ export default [
 		fuel: 2000,
 		wind: 0,
 		platforms: [
-			{
-				w: 150,
-				x: 0.5,
-				pickup: "glasses",
-			},
-			{
-				w: 150,
-				x: 0.7,
-				dropoff: "glasses",
-			},
+			{ w: 150, x: 0.5, pickup: "glasses" },
+			{ w: 150, x: 0.7, dropoff: "glasses" },
 		],
 	},
 
@@ -43,12 +30,7 @@ export default [
 		gravity: 0.013,
 		fuel: 1500,
 		wind: 0,
-		platforms: [
-			{
-				w: 100,
-				x: 0.2,
-			},
-		],
+		platforms: [{ w: 100, x: 0.2 }],
 	},
 
 	{
@@ -57,12 +39,7 @@ export default [
 		gravity: 0.025,
 		fuel: 1000,
 		wind: -0.005,
-		platforms: [
-			{
-				w: 80,
-				x: 0.2,
-			},
-		],
+		platforms: [{ w: 80, x: 0.2 }],
 	},
 
 	{
@@ -72,16 +49,8 @@ export default [
 		fuel: 2000,
 		wind: 0.007,
 		platforms: [
-			{
-				w: 100,
-				x: 0.2,
-				dropoff: "monkeys",
-			},
-			{
-				w: 100,
-				x: 0.8,
-				pickup: "monkeys",
-			},
+			{ w: 100, x: 0.2, dropoff: "monkeys" },
+			{ w: 100, x: 0.8, pickup: "monkeys" },
 		],
 	},
 
@@ -91,12 +60,7 @@ export default [
 		gravity: 0.035,
 		fuel: 2000,
 		wind: 0.01,
-		platforms: [
-			{
-				w: 50,
-				x: 0.2,
-			},
-		],
+		platforms: [{ w: 50, x: 0.2 }],
 	},
 
 	{
@@ -105,13 +69,6 @@ export default [
 		gravity: 0.045,
 		fuel: 1000,
 		wind: 0,
-		platforms: [
-			{
-				w: 30,
-				x: 0.8,
-				bouncy: true,
-			},
-		],
+		platforms: [{ w: 30, x: 0.8, bouncy: true }],
 	},
-*/
 ];
