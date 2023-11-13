@@ -14,7 +14,7 @@ const ENDLEVEL = "ENDLEVEL";
 const GAMEOVER = "GAMEOVER";
 
 const isTouchDevice = () => {
-	return true; // "ontouchstart" in document.documentElement;
+	return "ontouchstart" in document.documentElement;
 };
 
 export default class Lunar {
